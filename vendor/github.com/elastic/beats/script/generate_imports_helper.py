@@ -1,0 +1,1 @@
+/tmp/go/aflamant/src/github.com/aflamant/wikibeat/vendor/github.com/elastic/beats/metricbeat/scripts/generate_imports_helper.py
