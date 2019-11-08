@@ -19,8 +19,15 @@ type change struct {
     Pageid int `json:"pageid"`
     Revid int `json:"revid"`
     Oldrevid int `json:"old_revid"`
+		User string `json:"user"`
     Rcid int `json:"rcid"`
-    Timestamp string `json:"timestamp"`
+		Timestamp string `json:"timestamp"`
+
+		//flags
+		Bot *string `json:"bot,omitempty"`
+		Minor *string `json:"minor,omitempty`
+		Anon *string `json:"anon,omitempty`
+		New *string `json:"new,omitempty`
 }
 
 type query struct {
@@ -32,6 +39,22 @@ type answer struct {
     Query query `json:"query"`
 }
 
+func printRecentChanges(changes []change) {
+	for _, element := range changes {
+		fmt.Println("------------------------------------------")
+		fmt.Println("Title :\t\t", element.Title)
+		fmt.Println("User :\t\t", element.User)
+		fmt.Println("Type :\t\t", element.Type)
+		fmt.Println("Namespace :\t", element.Ns)
+		fmt.Println("Timestamp :\t", element.Timestamp)
+		fmt.Println("RevID :\t\t", element.Revid)
+		fmt.Println("Flags :")
+		fmt.Println("\tBot :\t\t", (element.Bot != nil))
+		fmt.Println("\tMinor edit :\t", (element.Minor != nil))
+		fmt.Println("\tAnonymous :\t", (element.Anon != nil))
+		fmt.Println("\tNew entry :\t", (element.New != nil))
+	}
+}
 
 func main() {
 
@@ -52,7 +75,7 @@ func main() {
     //     fmt.Println(answer1.Query.Recentchanges[i].Timestamp)
     // }
 
-    url := "https://en.wikipedia.org/w/api.php?action=query&list=recentchanges&rclimit=50&format=json"
+    url := "https://en.wikipedia.org/w/api.php?action=query&list=recentchanges&rclimit=10&format=json&rcprop=user|userid|comment|flags|timestamp|title|ids|sizes"
 
 	spaceClient := http.Client{
 		Timeout: time.Second * 2, // Maximum of 2 secs
@@ -83,5 +106,5 @@ func main() {
 		log.Fatal(jsonErr)
 	}
 
-	fmt.Println(people1)
+	printRecentChanges(people1.Query.Recentchanges)
 }

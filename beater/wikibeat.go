@@ -35,6 +35,30 @@ func New(b *beat.Beat, cfg *common.Config) (beat.Beater, error) {
 	return bt, nil
 }
 
+//JSON structures 
+type change struct {
+	//Id string `json:"id"`
+	//Body string `json:"body"`
+	Type string `json:"type"`
+	Ns int `json:"ns"`
+	Title string `json:"title"`
+	Pageid int `json:"pageid"`
+	Revid int `json:"revid"`
+	Oldrevid int `json:"old_revid"`
+	Rcid int `json:"rcid"`
+	Timestamp string `json:"timestamp"`
+}
+
+type query struct {
+Recentchanges []change `json:"recentchanges"`
+	//Other string `json:"other"`
+}
+
+type answer struct {
+	Query query `json:"query"`
+}
+
+
 // Run starts wikibeat.
 func (bt *wikibeat) Run(b *beat.Beat) error {
 	logp.Info("wikibeat is running! Hit CTRL-C to stop it.")
@@ -76,7 +100,7 @@ func (bt *wikibeat) Run(b *beat.Beat) error {
 		}
 		bt.client.Publish(event)
 		logp.Info("Event sent")
-		counter++
+		
 	}
 }
 
