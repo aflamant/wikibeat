@@ -9,6 +9,9 @@ import (
 	"github.com/elastic/beats/libbeat/logp"
 
 	"github.com/aflamant/wikibeat/config"
+
+	"net/http"
+	"encoding/json"
 )
 
 // wikibeat configuration.
@@ -44,6 +47,19 @@ func (bt *wikibeat) Run(b *beat.Beat) error {
 
 	ticker := time.NewTicker(bt.config.Period)
 	counter := 1
+
+	url := "https://en.wikipedia.org/w/api.php?action=query&list=recentchanges&rclimit=50&format=json"
+
+	APIClient := http.Client{
+		Timeout: time.Second * 2, // Maximum of 2 secs
+	}
+	
+	req, err := http.NewRequest(http.MethodGet, url, nil)
+		
+    if err != nil {
+	    log.Fatal(err)
+    }
+	
 	for {
 		select {
 		case <-bt.done:

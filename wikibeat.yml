@@ -71,7 +71,7 @@ setup.kibana:
 #-------------------------- Elasticsearch output ------------------------------
 output.elasticsearch:
   # Array of hosts to connect to.
-  hosts: ["localhost:9200"]
+  hosts: ["tc405-112-48:9200"]
 
   # Optional protocol and basic auth credentials.
   #protocol: "https"
