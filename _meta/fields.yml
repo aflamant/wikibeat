@@ -2,8 +2,89 @@
   title: wikibeat
   description:
   fields:
-    - name: counter
+    - name: edittype
+      type: alias
+      required: true
+      description: >
+        PLEASE UPDATE DOCUMENTATION
+    - name: namespace
       type: long
+      required: true
+      description: >
+        PLEASE UPDATE DOCUMENTATION
+    - name: title
+      type: alias
+      required: true
+      description: >
+        PLEASE UPDATE DOCUMENTATION
+    - name: pageid
+      type: long
+      required: true
+      description: >
+        PLEASE UPDATE DOCUMENTATION
+    - name: revid
+      type: long
+      required: true
+      description: >
+        PLEASE UPDATE DOCUMENTATION
+    - name: oldrevid
+      type: long
+      required: true
+      description: >
+        PLEASE UPDATE DOCUMENTATION
+    - name: rcid
+      type: long
+      required: true
+      description: >
+        PLEASE UPDATE DOCUMENTATION
+    - name: wikiuser
+      type: alias
+      required: true
+      description: >
+        PLEASE UPDATE DOCUMENTATION
+    - name: userid
+      type: long
+      required: true
+      description: >
+        PLEASE UPDATE DOCUMENTATION
+    - name: oldlen
+      type: long
+      required: true
+      description: >
+        PLEASE UPDATE DOCUMENTATION
+    - name: newlen
+      type: float
+      required: true
+      description: >
+        PLEASE UPDATE DOCUMENTATION
+    - name: date
+      type: date
+      # format: "YYYY-MM-DD'T'HH:mm:ss'Z'"
+      required: true
+      description: >
+        PLEASE UPDATE DOCUMENTATION
+    - name: comment
+      type: alias
+      required: true
+      description: >
+        PLEASE UPDATE DOCUMENTATION
+    - name: bot
+      type: boolean
+      required: true
+      description: >
+        PLEASE UPDATE DOCUMENTATION
+    - name: anonymous
+      type: boolean
+      required: true
+      description: >
+        PLEASE UPDATE DOCUMENTATION
+    - name: new
+      type: boolean
+      required: true
+      description: >
+        PLEASE UPDATE DOCUMENTATION
+    - name: minor
+      type: boolean
       required: true
       description: >
         PLEASE UPDATE DOCUMENTATION

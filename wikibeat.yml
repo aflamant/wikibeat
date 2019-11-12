@@ -4,7 +4,7 @@
 
 wikibeat:
   # Defines how often an event is sent to the output
-  period: 1s
+  period: 10s
 
 #================================ General =====================================
 
@@ -71,7 +71,7 @@ setup.kibana:
 #-------------------------- Elasticsearch output ------------------------------
 output.elasticsearch:
   # Array of hosts to connect to.
-  hosts: ["tc405-112-48:9200"]
+  hosts: ["localhost:9200"]
 
   # Optional protocol and basic auth credentials.
   #protocol: "https"

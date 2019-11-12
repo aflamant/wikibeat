@@ -3,6 +3,7 @@ package beater
 import (
 	"fmt"
 	"time"
+	"log"
 
 	"github.com/elastic/beats/libbeat/beat"
 	"github.com/elastic/beats/libbeat/common"
@@ -12,6 +13,7 @@ import (
 
 	"net/http"
 	"encoding/json"
+	"io/ioutil"
 )
 
 // wikibeat configuration.
@@ -37,8 +39,6 @@ func New(b *beat.Beat, cfg *common.Config) (beat.Beater, error) {
 
 //JSON structures 
 type change struct {
-	//Id string `json:"id"`
-	//Body string `json:"body"`
 	Type string `json:"type"`
 	Ns int `json:"ns"`
 	Title string `json:"title"`
@@ -46,7 +46,18 @@ type change struct {
 	Revid int `json:"revid"`
 	Oldrevid int `json:"old_revid"`
 	Rcid int `json:"rcid"`
-	Timestamp string `json:"timestamp"`
+	User string `json:"user"`
+	Userid int `json:"userid"`
+	Oldlen int `json:"oldlen`
+	Newlen int `json:"newlen`
+	Date string `json:"timestamp"`
+	Comment string `json:"comment"`
+
+	//flags
+		Bot *string `json:"bot,omitempty"`
+		Minor *string `json:"minor,omitempty`
+		Anon *string `json:"anon,omitempty`
+		New *string `json:"new,omitempty`
 }
 
 type query struct {
@@ -70,9 +81,8 @@ func (bt *wikibeat) Run(b *beat.Beat) error {
 	}
 
 	ticker := time.NewTicker(bt.config.Period)
-	counter := 1
 
-	url := "https://en.wikipedia.org/w/api.php?action=query&list=recentchanges&rclimit=50&format=json"
+	url := "https://en.wikipedia.org/w/api.php?action=query&list=recentchanges&rclimit=10&format=json&rcprop=user|userid|comment|flags|timestamp|title|ids|sizes"
 
 	APIClient := http.Client{
 		Timeout: time.Second * 2, // Maximum of 2 secs
@@ -91,16 +101,49 @@ func (bt *wikibeat) Run(b *beat.Beat) error {
 		case <-ticker.C:
 		}
 
-		event := beat.Event{
-			Timestamp: time.Now(),
-			Fields: common.MapStr{
-				"type":    b.Info.Name,
-				"counter": counter,
-			},
+		res, getErr := APIClient.Do(req)
+			if getErr != nil {
+			log.Fatal(getErr)
 		}
-		bt.client.Publish(event)
-		logp.Info("Event sent")
-		
+
+		body, readErr := ioutil.ReadAll(res.Body)
+			if readErr != nil {
+			log.Fatal(readErr)
+		}
+
+		answer1 := answer{}
+		json.Unmarshal(body, &answer1)
+
+		// rc := answer1.Query.Recentchanges
+		for _, rc := range answer1.Query.Recentchanges {
+			// fmt.Printf("Object : %+v\n", rc)
+
+			event := beat.Event{
+				Timestamp: time.Now(),
+				Fields: common.MapStr{
+					"type":    		b.Info.Name,
+					"edittype": 	rc.Type,
+					"namespace": 	rc.Ns,
+					"title": 		rc.Title,
+					"pageid":		rc.Pageid,
+					"revid": 		rc.Revid,
+					"oldrevid": 	rc.Oldrevid,
+					"rcid": 		rc.Rcid,
+					"wikiuser": 	rc.User,
+					"userid": 		rc.Userid,
+					"oldlen": 		rc.Oldlen,
+					"newlen": 		rc.Newlen,
+					"date": 		rc.Date,
+					"comment": 		rc.Comment,
+					"bot": 			(rc.Bot != nil),
+					"anonymous": 	(rc.Anon != nil),
+					"new": 			(rc.New != nil),
+					"minor": 		(rc.Minor != nil),
+				},
+			}
+			bt.client.Publish(event)
+			logp.Info("Event sent")
+		}
 	}
 }
 

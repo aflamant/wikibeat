@@ -10,20 +10,25 @@ import (
 	"time"
 )
 
+//JSON structures 
 type change struct {
-    //Id string `json:"id"`
-    //Body string `json:"body"`
-    Type string `json:"type"`
-    Ns int `json:"ns"`
-    Title string `json:"title"`
-    Pageid int `json:"pageid"`
-    Revid int `json:"revid"`
-    Oldrevid int `json:"old_revid"`
-		User string `json:"user"`
-    Rcid int `json:"rcid"`
-		Timestamp string `json:"timestamp"`
+	//Id string `json:"id"`
+	//Body string `json:"body"`
+	Type string `json:"type"`
+	Ns int `json:"ns"`
+	Title string `json:"title"`
+	Pageid int `json:"pageid"`
+	Revid int `json:"revid"`
+	Oldrevid int `json:"old_revid"`
+	Rcid int `json:"rcid"`
+	User string `json:"user"`
+	Userid int `json:"userid"`
+	Oldlen int `json:"oldlen`
+	Newlen int `json:"newlen`
+	Date string `json:"timestamp"`
+	Comment string `json:"comment"`
 
-		//flags
+	//flags
 		Bot *string `json:"bot,omitempty"`
 		Minor *string `json:"minor,omitempty`
 		Anon *string `json:"anon,omitempty`
@@ -46,7 +51,7 @@ func printRecentChanges(changes []change) {
 		fmt.Println("User :\t\t", element.User)
 		fmt.Println("Type :\t\t", element.Type)
 		fmt.Println("Namespace :\t", element.Ns)
-		fmt.Println("Timestamp :\t", element.Timestamp)
+		fmt.Println("Timestamp :\t", element.Date)
 		fmt.Println("RevID :\t\t", element.Revid)
 		fmt.Println("Flags :")
 		fmt.Println("\tBot :\t\t", (element.Bot != nil))
@@ -106,5 +111,6 @@ func main() {
 		log.Fatal(jsonErr)
 	}
 
-	printRecentChanges(people1.Query.Recentchanges)
+	// printRecentChanges(people1.Query.Recentchanges)
+	fmt.Printf("%+v\n", people1.Query.Recentchanges[0])
 }
