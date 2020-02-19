@@ -5,7 +5,7 @@ Welcome to Wikibeat.
 Ensure that this folder is at the following location:
 `${GOPATH}/src/github.com/aflamant/wikibeat`
 
-## Getting Started with {Beat}
+## Getting Started with Wikibeat
 
 ### Requirements
 
